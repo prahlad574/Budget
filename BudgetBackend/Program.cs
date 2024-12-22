@@ -20,6 +20,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<ITaxPlanTransactionRepository, TaxPlanTransactionRepository>();
+builder.Services.AddScoped<ITaxPlanForFinancialYearRepository, TaxPlanForFinancialYearRepository>();
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<BudgetContext>(options =>
