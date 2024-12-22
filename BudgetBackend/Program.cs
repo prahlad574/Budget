@@ -2,6 +2,8 @@ using BudgetBackend.Models.Context;
 using BudgetBackend.Repositories.Interfaces;
 using BudgetBackend.Repositories;
 using Microsoft.EntityFrameworkCore;
+using BudgetBackend.Services.Interfaces;
+using BudgetBackend.Services;
 
 
 var myAllowSpeificOrigin = "_myAllowSpecificOrigins";
@@ -15,13 +17,18 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins("http://localhost:4200").AllowAnyHeader()
-                                                  .AllowAnyMethod(); ;
+                          .AllowAnyMethod(); ;
                       });
 });
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ITaxPlanTransactionRepository, TaxPlanTransactionRepository>();
 builder.Services.AddScoped<ITaxPlanForFinancialYearRepository, TaxPlanForFinancialYearRepository>();
+
+
+builder.Services.AddScoped<ITaxPlanTransactionService, TaxPlanTransactionService>();
+builder.Services.AddScoped<ITaxPlanForFinancialYearService, TaxPlanForFinancialYearService>();
+
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<BudgetContext>(options =>
