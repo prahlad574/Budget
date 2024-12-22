@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BudgetBackend.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetBackend.Models.Context
 {
@@ -8,5 +9,8 @@ namespace BudgetBackend.Models.Context
         {
             
         }
+
+        public DbSet<TaxPlanForFinancialYearEntity> TaxPlanForFinancialYear { get; set; }
+        public DbSet<TaxPlanTransactionsEntity> TaxPlanTransactions { get; set; }
     }
 }
