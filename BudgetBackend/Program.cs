@@ -1,4 +1,6 @@
 using BudgetBackend.Models.Context;
+using BudgetBackend.Repositories.Interfaces;
+using BudgetBackend.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -17,6 +19,7 @@ builder.Services.AddCors(options =>
                       });
 });
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<BudgetContext>(options =>
