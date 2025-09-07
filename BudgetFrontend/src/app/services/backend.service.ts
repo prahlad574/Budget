@@ -12,7 +12,12 @@ export class BackendService {
   getFinacialYears() {
     return this.http.get(this.backendUrl + '/GetFinancialYears');
   }
+
   getMonths() {
     return this.http.get(this.backendUrl + '/GetMonths');
+  }
+
+  addTaxPlan(taxPlan: {investmentName: string, investmentAmount: number | undefined, noOfMonths: number | undefined, section: string, investingIn: string, financialYear: string}) {
+    return this.http.post(this.backendUrl + '/TaxPlanForFinancialYear/AddTaxPlanForFinancialYear', taxPlan, { headers: this.header });
   }
 }
