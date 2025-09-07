@@ -1,0 +1,26 @@
+<mat-dialog-content>
+  <mat-form-field appearance="outline">
+    <mat-label>Investment Name</mat-label>
+    <input matInput [(ngModel)]="investmentName" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Investment Amount</mat-label>
+    <input matInput [(ngModel)]="investmentAmount" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>No of Months</mat-label>
+    <input matInput [(ngModel)]="noOfMonths" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Section</mat-label>
+    <input matInput [(ngModel)]="section" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Investing In</mat-label>
+    <input matInput [(ngModel)]="investingIn" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+   <button color="accent" mat-button mat-dialog-close >Cancel</button>
+  <button color="primary" mat-button mat-dialog-close (click)="addTaxPlan()" cdkFocusInitial>Add Tax Plan</button>
+</mat-dialog-actions>
