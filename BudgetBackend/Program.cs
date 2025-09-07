@@ -28,6 +28,7 @@ builder.Services.AddScoped<ITaxPlanForFinancialYearRepository, TaxPlanForFinanci
 
 builder.Services.AddScoped<ITaxPlanTransactionService, TaxPlanTransactionService>();
 builder.Services.AddScoped<ITaxPlanForFinancialYearService, TaxPlanForFinancialYearService>();
+builder.Services.AddScoped<IYearsandMonthsService, YearsandMonthsService>();
 
 builder.Services.AddControllers();
 
