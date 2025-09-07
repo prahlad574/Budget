@@ -9,6 +9,6 @@ namespace BudgetBackend.Repositories.Interfaces
         void AddAsync(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity);
-        void SaveChangesAsync();
+        void SaveChanges();
     };
 }

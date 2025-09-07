@@ -32,9 +32,9 @@ namespace BudgetBackend.Repositories
            return GetDbSet().Where(predicate);
         }
 
-        public async void SaveChangesAsync()
+        public void SaveChanges()
         {
-            await _budgetDBContext.SaveChangesAsync();
+            _budgetDBContext.SaveChanges();
         }
 
         public void Update(TEntity entity)

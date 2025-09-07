@@ -12,6 +12,7 @@ import { AppEventType } from '../models/app.event.type';
 export class DataSourceService {
   financialYears: FinancialYear[] = [];
   months: string[] = [];
+  selectedFinancialYear: string = '';
   constructor(private backendService: BackendService,
     private eventQueueService: EventQueueService
   ) { }

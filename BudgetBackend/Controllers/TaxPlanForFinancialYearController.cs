@@ -1,4 +1,5 @@
-﻿using BudgetBackend.Services.Interfaces;
+﻿using BudgetBackend.Models.Classes;
+using BudgetBackend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetBackend.Controllers
@@ -12,6 +13,13 @@ namespace BudgetBackend.Controllers
         public TaxPlanForFinancialYearController(ITaxPlanForFinancialYearService taxPlanForFinancialYearService)
         {
             _taxPlanForFinancialYearService = taxPlanForFinancialYearService;
+        }
+
+        [HttpPost("AddTaxPlanForFinancialYear")]
+        public IActionResult AddTaxPlanForFinancialYear([FromBody]TaxPlanForFinancialYear taxPlanForFinancialYear)
+        {
+            _taxPlanForFinancialYearService.AddTaxPlanForFinancialYear(taxPlanForFinancialYear);
+            return Ok();
         }
     }
 }
