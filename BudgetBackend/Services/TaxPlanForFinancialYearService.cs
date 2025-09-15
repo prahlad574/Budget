@@ -24,7 +24,7 @@ namespace BudgetBackend.Services
                 Section = taxPlanForFinancialYear.Section,
                 TaxPlanForFinancialYearId = (Guid)taxPlanForFinancialYear.TaxPlanForFinancialYearId
             });
-            _taxPlanForFinancialYearRepository.SaveChangesAsync();
+            _taxPlanForFinancialYearRepository.SaveChanges();
         }
     }
 }
