@@ -1,2 +1,44 @@
-<button class="button" color="accent" (click)="openTaxPlanDialog()" mat-flat-button>Add Plan</button>
 <button class="button" color="primary" (click)="openAddTaxPlanTransactionDialog()" mat-flat-button>Add Transaction</button>
+<div class="container">
+    <div class="header">
+        <h2>Tax Plan</h2>
+        <button mat-raised-button color="primary" (click)="openTaxPlanDialog()">Add Tax Plan</button>
+    </div>
+  <table mat-table [dataSource]="taxPlans" class="mat-elevation-z2">
+
+    <ng-container matColumnDef="section">
+      <th mat-header-cell *matHeaderCellDef> Section </th>
+      <td mat-cell *matCellDef="let plan"> {{plan.section}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Amount </th>
+      <td mat-cell *matCellDef="let plan"> ₹{{plan.amount}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="scheme">
+      <th mat-header-cell *matHeaderCellDef> Scheme </th>
+      <td mat-cell *matCellDef="let plan"> {{plan.scheme}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="months">
+      <th mat-header-cell *matHeaderCellDef> Months </th>
+      <td mat-cell *matCellDef="let plan"> {{plan.months}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let plan; let i = index">
+        <button mat-icon-button color="accent" (click)="openTaxPlanDialog(plan, i)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deletePlan(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['section', 'amount', 'scheme', 'months', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['section', 'amount', 'scheme', 'months', 'actions']"></tr>
+  </table>
+</div>
