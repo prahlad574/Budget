@@ -9,12 +9,14 @@ import { ToggleComponent } from './toggle/toggle.component';
 import { DataSourceService } from './services/data-source.service';
 import { EventQueueService } from './services/event-queue.service';
 import { AppEventType } from './models/app.event.type';
+import { SignalRService } from './services/signal-r.service';
+import { sign } from 'crypto';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, ToggleComponent, RouterLink, RouterLinkActive],
-  providers: [DataSourceService],
+  providers: [DataSourceService, SignalRService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -28,7 +30,8 @@ export class AppComponent implements OnInit{
   @ViewChild('snav') sidenav!: MatSidenav;
   constructor(private dataSourceService: DataSourceService,
     private eventQueue: EventQueueService,
-    private router: Router
+    private router: Router,
+    private signalRService: SignalRService
   ) {
     this.router.events.subscribe((event: any) => {
       // sidenav close on same route navigation
@@ -38,6 +41,7 @@ export class AppComponent implements OnInit{
     });
    }
   ngOnInit(): void {
+    this.signalRService.startConnection();
     this.eventQueue.On(AppEventType.BasicMetaDataLoaded).subscribe(event => {
       this.getMetaData();
     })
