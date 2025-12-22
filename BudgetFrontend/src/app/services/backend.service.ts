@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class BackendService {
-  readonly backendUrl = "https://localhost:44345"; 
+  readonly backendUrl = "https://localhost:7271"; 
   header = new HttpHeaders({ 'Content-Type': 'application/json' });
   constructor(private http: HttpClient) { }
 

@@ -1,5 +1,5 @@
 <section>
-    <mat-button-toggle-group [(ngModel)]="selectedItem" [hideSingleSelectionIndicator]= "false" aria-label="Font Style">
+    <mat-button-toggle-group [(ngModel)]="selectedItem" (ngModelChange)="onSelectionChange($event)" [hideSingleSelectionIndicator]= "false" aria-label="Font Style">
         <mat-button-toggle *ngFor="let item of data" value="{{item}}" >{{item}}</mat-button-toggle>
     </mat-button-toggle-group>
 </section>

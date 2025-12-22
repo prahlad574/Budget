@@ -1,3 +1,5 @@
 export enum AppEventType{
-    BasicMetaDataLoaded = 'basicMetaDataLoaded'
+    BasicMetaDataLoaded = 'basicMetaDataLoaded',
+    FinancialYearChanged = 'financialYearChanged',
+    MonthChanged = 'monthChanged'
 }

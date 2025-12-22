@@ -10,13 +10,13 @@ import { DataSourceService } from './services/data-source.service';
 import { EventQueueService } from './services/event-queue.service';
 import { AppEventType } from './models/app.event.type';
 import { SignalRService } from './services/signal-r.service';
-import { sign } from 'crypto';
+import { AppEvent } from './models/app.event';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, ToggleComponent, RouterLink, RouterLinkActive],
-  providers: [DataSourceService, SignalRService],
+  // providers: [DataSourceService, SignalRService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit{
   title = 'BudgetFrontend';
 
   @ViewChild('snav') sidenav!: MatSidenav;
-  constructor(private dataSourceService: DataSourceService,
+  constructor(private   dataSourceService: DataSourceService,
     private eventQueue: EventQueueService,
     private router: Router,
     private signalRService: SignalRService
@@ -54,6 +54,19 @@ export class AppComponent implements OnInit{
     this.months = metaData.months;
     this.selectedFinancialYear = metaData.financialYears.filter(fy => fy.isCurrentFinancialYear === true).map(fy => fy.financialYearName)[0];
     this.selectedMonth = this.months[new Date().getMonth()-3];
+    this.dataSourceService.selectedFinancialYear = this.selectedFinancialYear;
+    this.dataSourceService.selectedMonth = this.selectedMonth;
   }
-  
+  onFinancialYearChange(financialYear: string) {
+    this.selectedFinancialYear = financialYear;
+    this.dataSourceService.selectedFinancialYear = financialYear;
+    this.eventQueue.dispatch(new AppEvent(AppEventType.FinancialYearChanged, financialYear)); 
+  }
+
+  onMonthChange(month: string) {
+    this.selectedMonth = month;
+    this.dataSourceService.selectedMonth = month;
+    this.eventQueue.dispatch(new AppEvent(AppEventType.MonthChanged, month));
+  }
+
 }
