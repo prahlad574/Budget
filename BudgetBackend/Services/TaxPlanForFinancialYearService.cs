@@ -1,15 +1,19 @@
 ﻿using BudgetBackend.Models.Classes;
 using BudgetBackend.Repositories.Interfaces;
 using BudgetBackend.Services.Interfaces;
+using BudgetBackend.SignalR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BudgetBackend.Services
 {
     public class TaxPlanForFinancialYearService : ITaxPlanForFinancialYearService
     {
         private readonly ITaxPlanForFinancialYearRepository _taxPlanForFinancialYearRepository;
-        public TaxPlanForFinancialYearService(ITaxPlanForFinancialYearRepository taxPlanForFinancialYearRepository)
+        private readonly IHubContext<BudgetHub> _budgetHubContext;
+        public TaxPlanForFinancialYearService(ITaxPlanForFinancialYearRepository taxPlanForFinancialYearRepository, IHubContext<BudgetHub> budgetHubContext)
         {
             _taxPlanForFinancialYearRepository = taxPlanForFinancialYearRepository;
+            _budgetHubContext = budgetHubContext;
         }
 
         public void AddTaxPlanForFinancialYear(TaxPlanForFinancialYear taxPlanForFinancialYear)
@@ -25,6 +29,7 @@ namespace BudgetBackend.Services
                 TaxPlanForFinancialYearId = (Guid)taxPlanForFinancialYear.TaxPlanForFinancialYearId
             });
             _taxPlanForFinancialYearRepository.SaveChanges();
+            _budgetHubContext.Clients.All.SendAsync($"TaxPlan-"+ taxPlanForFinancialYear.FinancialYear, "TaxPlanAdded",taxPlanForFinancialYear);
         }
     }
 }

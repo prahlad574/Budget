@@ -13,6 +13,7 @@ export class DataSourceService {
   financialYears: FinancialYear[] = [];
   months: string[] = [];
   selectedFinancialYear: string = '';
+  selectedMonth: string = '';
   constructor(private backendService: BackendService,
     private eventQueueService: EventQueueService
   ) { }

@@ -14,8 +14,8 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <app-toggle [selectedItem]="selectedFinancialYear" [data]="financialYears"></app-toggle>
-      <app-toggle [selectedItem]="selectedMonth" [data]="months"></app-toggle>
+      <app-toggle [selectedItem]="selectedFinancialYear" [data]="financialYears" (selectionChange)="onFinancialYearChange($event)"></app-toggle>
+      <app-toggle [selectedItem]="selectedMonth" [data]="months" (selectionChange)="onMonthChange($event)"></app-toggle>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

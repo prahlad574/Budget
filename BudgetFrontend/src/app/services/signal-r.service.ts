@@ -9,7 +9,7 @@ export class SignalRService {
 hubConnection: signalR.HubConnection;
 constructor() { 
   this.hubConnection = new signalR.HubConnectionBuilder()
-    .withUrl('https://localhost:44345/budgetHub', {
+    .withUrl('https://localhost:7271/budgetHub', {
       skipNegotiation: true,
       transport: signalR.HttpTransportType.WebSockets
     }) // SignalR hub URL
@@ -29,8 +29,8 @@ startConnection = () => {
 subscribeMessage(key: string): Observable<string> {
   console.log('Started subscribing for key' + key);
   return new Observable<string>((observer) => {
-    this.hubConnection.on(key, (message: string) => {
-      observer.next(message);
+    this.hubConnection.on(key, (message: string, data: any) => {
+      observer.next({ message, data } as unknown as string);
     });
   });
 }

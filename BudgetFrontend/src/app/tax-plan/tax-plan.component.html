@@ -5,25 +5,29 @@
         <button mat-raised-button color="primary" (click)="openTaxPlanDialog()">Add Tax Plan</button>
     </div>
   <table mat-table [dataSource]="taxPlans" class="mat-elevation-z2">
+    <ng-container matColumnDef="investingIn">
+      <th mat-header-cell *matHeaderCellDef> Investing In </th>
+      <td mat-cell *matCellDef="let plan"> {{plan.investingIn}} </td>
+    </ng-container>
 
     <ng-container matColumnDef="section">
       <th mat-header-cell *matHeaderCellDef> Section </th>
       <td mat-cell *matCellDef="let plan"> {{plan.section}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef> Amount </th>
-      <td mat-cell *matCellDef="let plan"> ₹{{plan.amount}} </td>
-    </ng-container>
-
     <ng-container matColumnDef="scheme">
       <th mat-header-cell *matHeaderCellDef> Scheme </th>
-      <td mat-cell *matCellDef="let plan"> {{plan.scheme}} </td>
+      <td mat-cell *matCellDef="let plan"> {{plan.investmentName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Amount </th>
+      <td mat-cell *matCellDef="let plan"> ₹{{plan.investmentAmount}} </td>
     </ng-container>
 
     <ng-container matColumnDef="months">
       <th mat-header-cell *matHeaderCellDef> Months </th>
-      <td mat-cell *matCellDef="let plan"> {{plan.months}} </td>
+      <td mat-cell *matCellDef="let plan"> {{plan.noOfMonths}} </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
@@ -38,7 +42,7 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="['section', 'amount', 'scheme', 'months', 'actions']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['section', 'amount', 'scheme', 'months', 'actions']"></tr>
+    <tr mat-header-row *matHeaderRowDef="['investingIn', 'section', 'scheme', 'amount', 'months', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['investingIn', 'section', 'scheme', 'amount', 'months', 'actions']"></tr>
   </table>
 </div>
