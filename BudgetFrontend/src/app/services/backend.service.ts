@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { TaxPlanForFinancialYear } from '../models/taxPlan';
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +20,17 @@ export class BackendService {
 
   addTaxPlan(taxPlan: {investmentName: string, investmentAmount: number | undefined, noOfMonths: number | undefined, section: string, investingIn: string, financialYear: string}) {
     return this.http.post(this.backendUrl + '/TaxPlanForFinancialYear/AddTaxPlanForFinancialYear', taxPlan, { headers: this.header });
+  }
+
+  getTaxPlanForFinancialYear(financialYear: string) {
+    return this.http.get<TaxPlanForFinancialYear[]>(this.backendUrl + '/TaxPlanForFinancialYear/GetTaxPlanForFinancialYear/' + financialYear);
+  }
+
+  updateTaxPlan(taxplan: TaxPlanForFinancialYear) {
+    return this.http.put(this.backendUrl + '/TaxPlanForFinancialYear/UpdateTaxPlanForFinancialYear', taxplan, { headers: this.header });
+  } 
+
+  deleteTaxPlan(taxPlanForFinancialYearId: number) {
+    return this.http.delete(this.backendUrl + '/TaxPlanForFinancialYear/DeleteTaxPlanForFinancialYear/' + taxPlanForFinancialYearId);
   }
 }

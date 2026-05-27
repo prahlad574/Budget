@@ -36,7 +36,7 @@
         <button mat-icon-button color="accent" (click)="openTaxPlanDialog(plan, i)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" (click)="deletePlan(i)">
+        <button mat-icon-button color="warn" (click)="deletePlan(plan.taxPlanForFinancialYearId)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>

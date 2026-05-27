@@ -2,6 +2,9 @@
 using BudgetBackend.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace BudgetBackend.Repositories
 {
@@ -42,9 +45,24 @@ namespace BudgetBackend.Repositories
             _budgetDBContext.Set<TEntity>().Update(entity);
         }
 
+        public async Task<TEntity?> GetByIdAsync(params object[] keyValues)
+        {
+            var entity = await _budgetDBContext.Set<TEntity>().FindAsync(keyValues);
+            return entity;
+        }
+
+        public async Task<TEntity?> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool asNoTracking = true, CancellationToken cancellationToken = default)
+        {
+            var query = GetDbSet().Where(predicate);
+            if (asNoTracking) query = query.AsNoTracking();
+            return await query.SingleOrDefaultAsync(cancellationToken);
+        }
+
         private DbSet<TEntity> GetDbSet()
         {
             return _budgetDBContext.Set<TEntity>();
         }
+
+
     }
 }
