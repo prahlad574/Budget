@@ -10,6 +10,7 @@ import { DataSourceService } from '../services/data-source.service';
 import { TaxPlanForFinancialYear } from '../models/taxPlan';
 import { EventQueueService } from '../services/event-queue.service';
 import { AppEventType } from '../models/app.event.type';
+import { BackendService } from '../services/backend.service';
 
 @Component({
   selector: 'app-tax-plan',
@@ -26,14 +27,38 @@ export class TaxPlanComponent {
   constructor(public dialog: MatDialog,
     private signalRService: SignalRService,
     private dataSourceService: DataSourceService,
-    private eventQueue: EventQueueService
+    private eventQueue: EventQueueService,
+    private backendService: BackendService
   ) {
-    this.subscribeToTaxPlanUpdates();
+    if(this.dataSourceService.selectedFinancialYear !== ''){
+      this.loadTaxPlansForSelectedFinancialYear();
+      this.subscribeToTaxPlanUpdates();
+    }
+    this.subscribeToMetadataChanges();
     this.subscribeToFinancialYearChanges();
 
   }
 
-  openTaxPlanDialog(taxPlan?: any, index?: number) {
+  subscribeToMetadataChanges() {
+    this.eventQueue.On(AppEventType.BasicMetaDataLoaded).subscribe(event => {
+      if(this.dataSourceService.selectedFinancialYear !== ''){
+        this.loadTaxPlansForSelectedFinancialYear();
+        this.subscribeToTaxPlanUpdates();
+      }
+    });
+  }
+
+  loadTaxPlansForSelectedFinancialYear() {
+    this.backendService.getTaxPlanForFinancialYear(this.dataSourceService.selectedFinancialYear).subscribe({
+      next: (taxPlans: TaxPlanForFinancialYear[]) => {
+        this.taxPlans = taxPlans;
+      },
+      error: (error) => {
+        console.error('Error fetching tax plans for financial year', error);
+      }
+    });
+  }
+  openTaxPlanDialog(taxPlan?: TaxPlanForFinancialYear, index?: number) {
     this.dialog.open(AddTaxPlanDialogComponent, {
       width: '600px',
       data: { taxPlan, index }
@@ -49,6 +74,7 @@ export class TaxPlanComponent {
   
   subscribeToFinancialYearChanges() {
     this.eventQueue.On(AppEventType.FinancialYearChanged).subscribe(event => {
+      this.loadTaxPlansForSelectedFinancialYear();
       this.subscribeToTaxPlanUpdates();
     });
   }
@@ -68,9 +94,15 @@ export class TaxPlanComponent {
     }
   }
 
-  deletePlan(index: number) {
-    this.taxPlans.splice(index, 1);
-    this.taxPlans = [...this.taxPlans]; // Refresh the data source
+  deletePlan(taxPlanForFinancialYearId: number) {
+    this.backendService.deleteTaxPlan(taxPlanForFinancialYearId).subscribe({
+      next: () => {
+        console.log('Tax plan deleted successfully');
+      },
+      error: (error) => {
+        console.error('Error deleting tax plan', error);
+      }
+    });
   }
 
   processToTaxPlanUpdates(data: any) {
@@ -78,15 +110,15 @@ export class TaxPlanComponent {
       case 'TaxPlanAdded':
         this.taxPlans.push(data.data);
         break;
-      // case 'TaxPlanUpdated':
-      //   const index = this.taxPlans.findIndex(tp => tp.id === data.data.id);
-      //   if (index !== -1) {
-      //     this.taxPlans[index] = data.data;
-      //   }
-      //   break;
-      // case 'TaxPlanDeleted':
-      //   this.taxPlans = this.taxPlans.filter(tp => tp.id !== data.data.id);
-      //   break;
+      case 'TaxPlanUpdated':
+        const index = this.taxPlans.findIndex(tp => tp.taxPlanForFinancialYearId === data.data.taxPlanForFinancialYearId);
+        if (index !== -1) {
+          this.taxPlans[index] = data.data;
+        }
+        break;
+      case 'TaxPlanDeleted':
+        this.taxPlans = this.taxPlans.filter(tp => tp.taxPlanForFinancialYearId !== data.data);
+        break;
     }
     this.taxPlans = [...this.taxPlans]; // Refresh the data source
   }
