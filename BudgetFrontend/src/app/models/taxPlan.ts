@@ -7,3 +7,10 @@ export interface TaxPlanForFinancialYear {
   investingIn: string;
   financialYear: string;
 }
+
+export interface TaxplanTransaction {
+  taxPlanTransactionId: number;
+  taxPlanForFinancialYearId: number;
+  transactionAmount: number;
+  transactionDate: Date;
+}

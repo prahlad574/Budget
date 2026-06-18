@@ -15,12 +15,24 @@ namespace BudgetBackend.Controllers
         }
         // action method to insert a tax plan transaction
 
-        [HttpPost("AddTaxPlanTransactionForFinancialYear")]
-        public IActionResult AddTaxPlanTransactionForFinancialYear([FromBody] TaxPlanTransactionForFinancialYear taxPlanTransactionDto)
+        [HttpPost("AddTaxPlanTransaction")]
+        public async Task<IActionResult> AddTaxPlanTransactionForFinancialYear([FromBody] TaxPlanTransaction taxPlanTransactionDto)
         {
             // Call the service to insert the tax plan transaction
-            _taxPlanTransactionService.InsertTaxPlanTransaction(taxPlanTransactionDto);
-            return Ok("Tax plan transaction inserted successfully");
+            var result = await _taxPlanTransactionService.InsertTaxPlanTransaction(taxPlanTransactionDto);
+            if (!result)
+                return BadRequest("Failed to insert tax plan transaction");
+
+            return Ok();
+
+        }
+
+        [HttpGet("GetTransactionsForTaxplan/{taxPlanForFinancialyearID}")]
+        public async Task<IActionResult> GetTransactionsForTaxplanForFinancialYearID([FromRoute] Guid taxPlanForFinancialyearID)
+        {
+            var result = await _taxPlanTransactionService.GetTransactionsForTaxplanForFinancialYearID(taxPlanForFinancialyearID);
+           
+            return Ok(result);
 
         }
     }

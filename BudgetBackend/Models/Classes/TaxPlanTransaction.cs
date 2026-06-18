@@ -1,6 +1,6 @@
 ﻿namespace BudgetBackend.Models.Classes
 {
-    public class TaxPlanTransactionForFinancialYear
+    public class TaxPlanTransaction
     {
         public Guid TaxPlanTransactionId { get; set; }
 

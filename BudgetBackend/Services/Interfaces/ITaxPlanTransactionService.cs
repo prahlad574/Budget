@@ -4,6 +4,7 @@ namespace BudgetBackend.Services.Interfaces
 {
     public interface ITaxPlanTransactionService
     {
-        public void InsertTaxPlanTransaction(TaxPlanTransactionForFinancialYear taxPlanTransactionDto);
+        Task<bool> InsertTaxPlanTransaction(TaxPlanTransaction taxPlanTransactionDto);
+        Task<IEnumerable<TaxPlanTransaction>> GetTransactionsForTaxplanForFinancialYearID(Guid taxPlanForFinancialyearID);
     }
 }

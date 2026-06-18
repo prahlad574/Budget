@@ -22,7 +22,7 @@ namespace BudgetBackend.Services
             try
             {
                 taxPlanForFinancialYear.TaxPlanForFinancialYearId = Guid.NewGuid();
-                _taxPlanForFinancialYearRepository.AddAsync(new Models.Entities.TaxPlanForFinancialYearEntity
+                await _taxPlanForFinancialYearRepository.AddAsync(new Models.Entities.TaxPlanForFinancialYearEntity
                 {
                     FinancialYear = taxPlanForFinancialYear.FinancialYear,
                     InvestmentName = taxPlanForFinancialYear.InvestmentName,
@@ -32,7 +32,7 @@ namespace BudgetBackend.Services
                     Section = taxPlanForFinancialYear.Section,
                     TaxPlanForFinancialYearId = (Guid)taxPlanForFinancialYear.TaxPlanForFinancialYearId
                 });
-                _taxPlanForFinancialYearRepository.SaveChanges();
+                await _taxPlanForFinancialYearRepository.SaveChangesAsync();
                 await _budgetHubContext.Clients.All.SendAsync($"TaxPlan-" + taxPlanForFinancialYear.FinancialYear, "TaxPlanAdded", taxPlanForFinancialYear);
                 return true;
             }
@@ -86,7 +86,7 @@ namespace BudgetBackend.Services
                 existingEntity.NoOfMonths = taxPlanForFinancialYear.NoOfMonths;
                 existingEntity.Section = taxPlanForFinancialYear.Section;
                 _taxPlanForFinancialYearRepository.Update(existingEntity);
-                _taxPlanForFinancialYearRepository.SaveChanges();
+                await _taxPlanForFinancialYearRepository.SaveChangesAsync();
                 await _budgetHubContext.Clients.All.SendAsync($"TaxPlan-" + taxPlanForFinancialYear.FinancialYear, "TaxPlanUpdated", taxPlanForFinancialYear);
                 return true;
             }
@@ -108,7 +108,7 @@ namespace BudgetBackend.Services
                 }
 
                 _taxPlanForFinancialYearRepository.Delete(existingEntity);
-                _taxPlanForFinancialYearRepository.SaveChanges();
+                await _taxPlanForFinancialYearRepository.SaveChangesAsync();
                 await _budgetHubContext.Clients.All.SendAsync($"TaxPlan-" + existingEntity.FinancialYear, "TaxPlanDeleted", taxPlanForFinancialYearId);
                 return true;
             }
