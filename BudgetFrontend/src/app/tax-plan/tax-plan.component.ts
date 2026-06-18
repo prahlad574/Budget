@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddTaxPlanDialogComponent } from '../add-tax-plan-dialog/add-tax-plan-dialog.component';
-import { AddTaxPlanTransactionDialogComponent } from '../add-tax-plan-transaction-dialog/add-tax-plan-transaction-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule} from '@angular/material/table';
 import { SignalRService } from '../services/signal-r.service';
@@ -11,6 +10,7 @@ import { TaxPlanForFinancialYear } from '../models/taxPlan';
 import { EventQueueService } from '../services/event-queue.service';
 import { AppEventType } from '../models/app.event.type';
 import { BackendService } from '../services/backend.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tax-plan',
@@ -23,6 +23,7 @@ export class TaxPlanComponent {
 
   taxPlans: TaxPlanForFinancialYear[] = [];
   currentSignalRConnectionKey: string = '';
+  private router = inject(Router);
 
   constructor(public dialog: MatDialog,
     private signalRService: SignalRService,
@@ -65,11 +66,8 @@ export class TaxPlanComponent {
     });
   }
 
-  openAddTaxPlanTransactionDialog(taxPlan?: any, index?: number) {
-    this.dialog.open(AddTaxPlanTransactionDialogComponent, {
-      width: '600px',
-      data: { taxPlan, index }
-    });
+  openPlanTransactions(taxPlan?: TaxPlanForFinancialYear, index?: number) {
+    this.router.navigate(['tax-plan-transactions', taxPlan?.taxPlanForFinancialYearId]);
   }
   
   subscribeToFinancialYearChanges() {

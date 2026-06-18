@@ -6,10 +6,10 @@ namespace BudgetBackend.Repositories.Interfaces
     {
         IQueryable<TEntity> GetAll();
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
-        void AddAsync(TEntity entity);
+        Task AddAsync(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity);
-        void SaveChanges();
+        Task SaveChangesAsync();
         Task<TEntity?> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool asNoTracking = true, CancellationToken cancellationToken = default);
         Task<TEntity?> GetByIdAsync(params object[] keyValues);
     };

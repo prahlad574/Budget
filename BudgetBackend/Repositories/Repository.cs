@@ -15,7 +15,7 @@ namespace BudgetBackend.Repositories
         {
             _budgetDBContext = budgetDBContext;
         }
-        public async void AddAsync(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
            await _budgetDBContext.Set<TEntity>().AddAsync(entity);
         }
@@ -35,9 +35,9 @@ namespace BudgetBackend.Repositories
            return GetDbSet().Where(predicate);
         }
 
-        public void SaveChanges()
+        public async Task SaveChangesAsync()
         {
-            _budgetDBContext.SaveChanges();
+            await _budgetDBContext.SaveChangesAsync();
         }
 
         public void Update(TEntity entity)
