@@ -48,13 +48,13 @@ taxplanTransactions: TaxplanTransaction[] = [];
         this.taxplanTransactions.push(data.data);
         break;
       case 'TaxPlanTransactionUpdated':
-        const indexToUpdate = this.taxplanTransactions.findIndex(t => t.taxPlanTransactionId === data.taxPlanTransaction.taxPlanTransactionId);
+        const indexToUpdate = this.taxplanTransactions.findIndex(t => t.taxPlanTransactionId === data.data.taxPlanTransactionId);
         if (indexToUpdate !== -1) {
-          this.taxplanTransactions[indexToUpdate] = data.taxPlanTransaction;
+          this.taxplanTransactions[indexToUpdate] = data.data;
         }
         break;
       case 'TaxPlanTransactionDeleted':
-        this.taxplanTransactions = this.taxplanTransactions.filter(t => t.taxPlanTransactionId !== data.taxPlanTransactionId);
+        this.taxplanTransactions = this.taxplanTransactions.filter(t => t.taxPlanTransactionId !== data.data);
         break;
     }
     this.taxplanTransactions = [...this.taxplanTransactions];
@@ -81,8 +81,14 @@ taxplanTransactions: TaxplanTransaction[] = [];
   }
 
   deletePlanTransaction(taxPlanTransactionId: number) {
-    // Logic to delete a tax plan transaction goes here
-    console.log('Tax plan transaction deleted with ID:', taxPlanTransactionId);
+    this.backendService.deleteTaxPlanTransaction(taxPlanTransactionId).subscribe({
+      next: () => {
+        console.log('Tax plan transaction deleted successfully');
+      },
+      error: (error) => {
+        console.error('Error deleting tax plan transaction', error);
+      }
+    });
   }
 
   ngOnDestroy() {
