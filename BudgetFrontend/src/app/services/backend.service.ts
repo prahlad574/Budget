@@ -41,4 +41,12 @@ export class BackendService {
   getTransactionsForTaxPlan(taxPlanForFinancialYearId: string) {
     return this.http.get<TaxplanTransaction[]>(this.backendUrl + '/TaxPlanTransaction/GetTransactionsForTaxPlan/' + taxPlanForFinancialYearId);
   }
+
+  updateTaxPlanTransaction(taxPlanTransaction: TaxplanTransaction) {
+    return this.http.put(this.backendUrl + '/TaxPlanTransaction/UpdateTaxPlanTransaction', taxPlanTransaction, { headers: this.header });
+  }
+
+  deleteTaxPlanTransaction(taxPlanTransactionId: number) {
+    return this.http.delete(this.backendUrl + '/TaxPlanTransaction/DeleteTaxPlanTransaction/' + taxPlanTransactionId);
+  } 
 }

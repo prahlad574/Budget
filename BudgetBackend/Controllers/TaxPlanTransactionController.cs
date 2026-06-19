@@ -1,4 +1,5 @@
 ﻿using BudgetBackend.Models.Classes;
+using BudgetBackend.Services;
 using BudgetBackend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,25 @@ namespace BudgetBackend.Controllers
            
             return Ok(result);
 
+        }
+
+        [HttpPut("UpdateTaxPlanTransaction")]
+        public async Task<IActionResult> UpdateTaxPlanTransaction([FromBody] TaxPlanTransaction taxPlanTransaction)
+        {
+            var result = await _taxPlanTransactionService.UpdateTaxPlanTransaction(taxPlanTransaction);
+            if (result)
+                return Ok();
+            return NotFound();
+        }
+
+        [HttpDelete("DeleteTaxPlanTransaction/{id}")]
+        public async Task<IActionResult> DeleteTaxPlanTransaction([FromRoute] Guid id)
+        {
+            var result = await _taxPlanTransactionService.DeleteTaxPlanTransaction(id);
+            if (result)
+                return Ok();
+
+            return NotFound();
         }
     }
 }

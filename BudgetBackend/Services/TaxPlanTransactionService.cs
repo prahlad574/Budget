@@ -20,7 +20,8 @@ namespace BudgetBackend.Services
 
         public async Task<IEnumerable<TaxPlanTransaction>> GetTransactionsForTaxplanForFinancialYearID(Guid taxPlanForFinancialyearID)
         {
-            try { 
+            try
+            {
                 var result = await _taxPlanTransactionRepository.Find(x => x.TaxPlanForFinancialYearId == taxPlanForFinancialyearID).ToListAsync();
 
                 return result.Select(entity => new TaxPlanTransaction
@@ -42,12 +43,14 @@ namespace BudgetBackend.Services
 
         public async Task<bool> InsertTaxPlanTransaction(TaxPlanTransaction taxPlanTransactionDto)
         {
-            try {
+            try
+            {
                 taxPlanTransactionDto.TaxPlanTransactionId = Guid.NewGuid(); // Generating new GUID for the transaction
-                await _taxPlanTransactionRepository.AddAsync(new TaxPlanTransactionsEntity { 
+                await _taxPlanTransactionRepository.AddAsync(new TaxPlanTransactionsEntity
+                {
                     TaxPlanForFinancialYearId = taxPlanTransactionDto.TaxPlanForFinancialYearId,
                     TaxPlanTransactionId = taxPlanTransactionDto.TaxPlanTransactionId,
-                    TransactionAmount = taxPlanTransactionDto.TransactionAmount, 
+                    TransactionAmount = taxPlanTransactionDto.TransactionAmount,
                     TransactionDate = taxPlanTransactionDto.TransactionDate,
                 });
                 await _taxPlanTransactionRepository.SaveChangesAsync();
@@ -60,6 +63,50 @@ namespace BudgetBackend.Services
             {
                 // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
                 Console.WriteLine($"Error inserting tax plan transaction: {ex.Message}");
+                return false; // Indicate failure
+            }
+        }
+
+        public async Task<bool> UpdateTaxPlanTransaction(TaxPlanTransaction taxPlanTransaction)
+        {
+            try
+            {
+                var entity = await _taxPlanTransactionRepository.GetByIdAsync(taxPlanTransaction.TaxPlanTransactionId);
+                if (entity == null)
+                    return false;
+                entity.TransactionAmount = taxPlanTransaction.TransactionAmount;
+                entity.TransactionDate = taxPlanTransaction.TransactionDate;
+                _taxPlanTransactionRepository.Update(entity);
+                await _taxPlanTransactionRepository.SaveChangesAsync();
+                var key = $"TaxPlanTransaction-" + taxPlanTransaction.TaxPlanForFinancialYearId;
+                await _budgetHubContext.Clients.All.SendAsync(key, "TaxPlanTransactionUpdated", taxPlanTransaction);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error updating tax plan transaction: {ex.Message}");
+                return false; // Indicate failure
+            }
+        }
+
+        public async Task<bool> DeleteTaxPlanTransaction(Guid id)
+        {
+            try
+            {
+                var entity = await _taxPlanTransactionRepository.GetByIdAsync(id);
+                if (entity == null)
+                    return false;
+                _taxPlanTransactionRepository.Delete(entity);
+                await _taxPlanTransactionRepository.SaveChangesAsync();
+                var key = $"TaxPlanTransaction-" + entity.TaxPlanForFinancialYearId;
+                await _budgetHubContext.Clients.All.SendAsync(key, "TaxPlanTransactionDeleted", id);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error deleting tax plan transaction: {ex.Message}");
                 return false; // Indicate failure
             }
         }

@@ -39,7 +39,22 @@ export class AddTaxPlanTransactionDialogComponent implements OnInit {
   }
 
   updateTaxPlanTransaction(){
-
+    if(this.data?.taxplanTransaction) {
+      const updatedTransaction: TaxplanTransaction = {
+        taxPlanTransactionId: this.data.taxplanTransaction.taxPlanTransactionId,
+        taxPlanForFinancialYearId: this.data.taxplanTransaction.taxPlanForFinancialYearId,
+        transactionAmount: this.transactionAmount,
+        transactionDate: this.transactionDate!
+      };
+      this.backendService.updateTaxPlanTransaction(updatedTransaction).subscribe({
+        next: (response) => {
+          console.log('Tax plan transaction updated successfully', response);
+        },
+        error: (error) => {
+          console.error('Error updating tax plan transaction', error);
+        }
+      });
+    }
   }
 
   addTaxPlanTransaction() {
